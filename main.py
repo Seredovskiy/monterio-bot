@@ -5,29 +5,8 @@ from config import settings
 
 bot = commands.Bot(command_prefix = settings['PREFIX'])
 bot.remove_command('help')
-
-connection = sqlite3.connect('money.db')
-cursor = connection.cursor()
-
-
-
 @bot.event
 async def on_ready():
-	cursor.execute("""
-		name TEXT,
-		id INT,
-		cash BIGINT,
-		rep INT,
-		lvl INT
-	""")
-	connection.commit()
-	for guild in client.guilds:
-		for member in guild.members:
-			if cursor.execute(f"SELECT id FROM users WHERE id = {member.id}").fetchone() is None:
-				cursor.execute(f"INSERT INTO users VALUES ('{member}', {member.id}, 0, 0, 0)")
-				connection.commit()
-			else:
-				pass
 	print("Sussefully logged in as {0.user}".format(bot))
 	print("The prefix of bot is: $")
 	await bot.change_presence(activity=discord.Activity(type = discord.ActivityType.watching, name = "Server Rules"))
